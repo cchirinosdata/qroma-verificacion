@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificación Qroma - Punto de Venta Autorizado</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #005BBB;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 50px 40px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #7ED954, #61BB47, #7ED954);
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .logo-container {
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .qroma-logo {
+            width: 200px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .verification-status {
+            margin-bottom: 40px;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 30px;
+            background: linear-gradient(45deg, #7ED954, #61BB47);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 40px rgba(126, 217, 84, 0.4);
+        }
+
+        .checkmark {
+            width: 50px;
+            height: 50px;
+            stroke: #FFFFFF;
+            stroke-width: 5;
+            fill: none;
+            animation: checkmark 1s ease-in-out;
+        }
+
+        .title {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #FFFFFF;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .message {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: #E0E0E0;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease-out 0.6s both;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .message strong {
+            color: #7ED954;
+            font-weight: bold;
+        }
+
+        .confirmation-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #7ED954, #61BB47);
+            color: #FFFFFF;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            animation: fadeInUp 1s ease-out 0.9s both;
+            box-shadow: 0 4px 20px rgba(126, 217, 84, 0.3);
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #888;
+            animation: fadeIn 1s ease-out 1.2s both;
+        }
+
+        .footer a {
+            color: #7ED954;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #61BB47;
+        }
+
+        .scan-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #7ED954, transparent);
+            animation: scanIndicator 2s linear infinite;
+        }
+
+        /* Animaciones */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.08);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes checkmark {
+            0% {
+                stroke-dasharray: 0 100;
+            }
+            100% {
+                stroke-dasharray: 100 0;
+            }
+        }
+
+        @keyframes scanIndicator {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 40px 25px;
+                margin: 15px;
+            }
+
+            .title {
+                font-size: 2.2rem;
+                letter-spacing: 2px;
+            }
+
+            .message {
+                font-size: 1.2rem;
+                line-height: 1.6;
+            }
+
+            .qroma-logo {
+                width: 160px;
+            }
+
+            .success-icon {
+                width: 80px;
+                height: 80px;
+            }
+
+            .checkmark {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .title {
+                font-size: 1.8rem;
+                letter-spacing: 1px;
+            }
+
+            .message {
+                font-size: 1.1rem;
+            }
+
+            .qroma-logo {
+                width: 140px;
+            }
+        }
+
+        /* Efectos de partículas sutiles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: #005BBB;
+            border-radius: 50%;
+            animation: float 8s infinite linear;
+            opacity: 0.2;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.2;
+            }
+            90% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(-100px) translateX(50px);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Partículas animadas -->
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <div class="scan-indicator"></div>
+        
+        <div class="logo-container">
+            <img src="user_input_files/LOGO-QROMA-6.png" alt="Qroma Logo Oficial" class="qroma-logo">
+        </div>
+
+        <div class="verification-status">
+            <div class="success-icon">
+                <svg class="checkmark" viewBox="0 0 52 52">
+                    <path d="M14 27l8 8 16-16" />
+                </svg>
+            </div>
+        </div>
+
+        <h1 class="title">¡Confirmado!</h1>
+
+        <div class="message">
+            <strong>Es un Punto de Venta Autorizado por Qroma.</strong><br><br>
+            Gracias por confiar en nuestros productos originales.
+        </div>
+
+        <div class="confirmation-badge">
+            VERIFICACIÓN OFICIAL
+        </div>
+
+        <div class="footer">
+            <p>Sistema de verificación oficial Qroma</p>
+            <a href="#" onclick="showInfo()">Información del sistema</a>
+        </div>
+    </div>
+
+    <script>
+        // Generar partículas animadas sutiles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 8;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Mostrar información del sistema
+        function showInfo() {
+            alert(`Sistema de Verificación Qroma
+          
+Este sistema confirma que la tienda escaneada es un punto de venta autorizado oficial de Qroma.
+
+Todas las tiendas verificadas garantizan:
+- Productos 100% originales
+- Calidad certificada
+- Garantía oficial
+
+Para más información: www.qroma.com`);
+        }
+
+        // Verificar parámetro de tienda en URL (opcional)
+        function checkStoreParameter() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const storeId = urlParams.get('tienda');
+            
+            if (storeId) {
+                console.log(`Tienda verificada: ${storeId}`);
+                // Opcional: Mostrar notificación sutil
+                setTimeout(() => {
+                    console.log('Verificación completada exitosamente');
+                }, 1000);
+            }
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            checkStoreParameter();
+        });
+
+        // Efecto de entrada más suave
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease-in';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
